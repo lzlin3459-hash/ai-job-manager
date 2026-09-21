@@ -19,6 +19,9 @@
     {"name": "新媒体运营"}, {"name": "数据分析"}, {"name": "产品运营"}, {"name": "市场营销"},
     {"name": "供应链"}, {"name": "电商运营"}, {"name": "用户增长"}, {"name": "直播"}
   ]}},
+  {"field_name": "招聘类型", "type": 3, "property": {"options": [
+    {"name": "校园招聘"}, {"name": "社会招聘"}, {"name": "均可（经验不限）"}
+  ]}},
   {"field_name": "匹配度", "type": 2},
   {"field_name": "状态", "type": 3, "property": {"options": [
     {"name": "待投"}, {"name": "已投"}, {"name": "面试中"}, {"name": "已拒"}, {"name": "已下架"}

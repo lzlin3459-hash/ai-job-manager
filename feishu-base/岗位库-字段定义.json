@@ -1,7 +1,10 @@
 [
   {"field_name": "岗位名称", "type": 1, "is_primary": true},
   {"field_name": "公司", "type": 1},
-  {"field_name": "行业板块", "type": 3, "property": {"options": [{"name": "食品企业"}, {"name": "互联网企业"}, {"name": "其他"}]}},
+  {"field_name": "行业板块", "type": 3, "property": {"options": [
+    {"name": "食品企业"}, {"name": "互联网企业"}, {"name": "制造"}, {"name": "零售"},
+    {"name": "医疗健康"}, {"name": "金融"}, {"name": "教育"}, {"name": "企业服务/SaaS"}, {"name": "其他"}
+  ]}},
   {"field_name": "城市", "type": 1},
   {"field_name": "薪资范围", "type": 1},
   {"field_name": "经验要求", "type": 1},

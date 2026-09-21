@@ -1,0 +1,17 @@
+# 个人数据与本地文件：一律不入库
+*.pdf
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.csv
+*.jsonl
+
+# 技能运行痕迹
+.build/
+试跑交付/
+迁移-企业飞书/
+
+# 系统文件
+.DS_Store
+Thumbs.db

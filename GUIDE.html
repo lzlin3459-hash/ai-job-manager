@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 求职管家 · 5 分钟傻瓜式上手</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231B2A4A'/%3E%3Cpath d='M10 16l4 4 8-9' stroke='%23E8A33D' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    --ink:#1A2333; --ink-2:#4A5568; --ink-3:#8A94A6;
+    --navy:#1B2A4A; --navy-2:#24365E;
+    --amber:#E8A33D; --amber-soft:#FDF3E2;
+    --green:#2F7D5B; --green-soft:#E8F4EE;
+    --bg:#F6F7F9; --card:#FFFFFF; --line:#E4E8EF;
+    --radius:18px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.7; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+
+  /* ===== Hero ===== */
+  header{
+    background:linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
+    color:#fff; padding:64px 0 56px; position:relative; overflow:hidden;
+  }
+  header::after{
+    content:""; position:absolute; right:-120px; top:-120px; width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, rgba(232,163,61,.28) 0%, rgba(232,163,61,0) 70%);
+  }
+  .hero-badge{
+    display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.22); border-radius:999px; padding:6px 16px;
+    font-size:13px; letter-spacing:.5px; color:#F5E9D3; margin-bottom:20px;
+  }
+  .hero-badge svg{width:14px; height:14px;}
+  header h1{font-size:44px; font-weight:900; letter-spacing:1px; line-height:1.25;}
+  header h1 em{font-style:normal; color:var(--amber);}
+  .sub{font-size:17px; color:#C9D3E4; margin-top:14px; max-width:640px;}
+  .promises{display:flex; gap:12px; margin-top:26px; flex-wrap:wrap;}
+  .promise{
+    display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:8px 16px; font-size:14px; color:#E6ECF6;
+  }
+  .promise svg{width:16px; height:16px; color:var(--amber); flex:none;}
+
+  /* ===== 步骤 ===== */
+  main{padding:56px 0 72px;}
+  .intro{text-align:center; margin-bottom:44px;}
+  .intro h2{font-size:30px; font-weight:900;}
+  .intro p{color:var(--ink-2); margin-top:8px; font-size:15px;}
+  .steps{display:grid; grid-template-columns:repeat(3, 1fr); gap:22px; align-items:stretch;}
+  .step{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:30px 26px 26px; display:flex; flex-direction:column; position:relative;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .step:hover{transform:translateY(-3px); box-shadow:0 14px 34px rgba(27,42,74,.10);}
+  .step-num{
+    width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center;
+    font-size:20px; font-weight:900; color:#fff; margin-bottom:18px;
+  }
+  .step:nth-child(1) .step-num{background:var(--navy);}
+  .step:nth-child(2) .step-num{background:var(--amber); color:#3A2A08;}
+  .step:nth-child(3) .step-num{background:var(--green);}
+  .step h3{font-size:19px; font-weight:700; margin-bottom:10px;}
+  .step p{font-size:14px; color:var(--ink-2); flex:1;}
+  .step .todo{margin-top:14px; padding-top:14px; border-top:1px dashed var(--line); font-size:13px; color:var(--ink-3);}
+  .step .todo b{color:var(--green); font-weight:700;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border:none; border-radius:12px; cursor:pointer; text-decoration:none;
+    font-family:inherit; font-size:15px; font-weight:700; padding:13px 20px; margin-top:18px;
+    transition:filter .15s ease, transform .15s ease;
+  }
+  .btn:active{transform:scale(.98);}
+  .btn svg{width:17px; height:17px; flex:none;}
+  .btn-amber{background:var(--amber); color:#3A2A08;}
+  .btn-amber:hover{filter:brightness(1.06);}
+  .btn-navy{background:var(--navy); color:#fff;}
+  .btn-navy:hover{filter:brightness(1.15);}
+  .btn-ghost{background:transparent; border:1.5px solid var(--line); color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--ink-3);}
+
+  /* ===== 提示词折叠 ===== */
+  .prompt-box{
+    margin-top:18px; border:1px solid var(--line); border-radius:12px; background:var(--bg); overflow:hidden;
+  }
+  .prompt-box summary{
+    cursor:pointer; list-style:none; padding:13px 16px; font-size:14px; font-weight:700; color:var(--ink-2);
+    display:flex; align-items:center; gap:8px; user-select:none;
+  }
+  .prompt-box summary::-webkit-details-marker{display:none;}
+  .prompt-box summary .arrow{transition:transform .2s ease; color:var(--ink-3);}
+  .prompt-box[open] summary .arrow{transform:rotate(90deg);}
+  .prompt-box summary .len{margin-left:auto; font-weight:400; font-size:12px; color:var(--ink-3);}
+  .prompt-inner{padding:0 16px 16px;}
+  #promptText{
+    background:#0F1A2E; color:#D7E0EF; border-radius:10px; padding:16px; font-size:12.5px;
+    font-family:'SFMono-Regular', Consolas, 'Courier New', monospace; white-space:pre-wrap; word-break:break-word;
+    max-height:320px; overflow:auto; line-height:1.65;
+  }
+  .copy-row{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;}
+
+  /* ===== 引导说明 ===== */
+  .guide{
+    margin-top:52px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:34px 32px;
+  }
+  .guide h2{font-size:22px; font-weight:900; margin-bottom:8px;}
+  .guide > p{color:var(--ink-2); font-size:14px; margin-bottom:20px;}
+  .check{display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--line); align-items:flex-start;}
+  .check:last-child{border-bottom:none;}
+  .check .ico{
+    width:28px; height:28px; border-radius:9px; background:var(--green-soft); color:var(--green); flex:none;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+  .check .ico svg{width:15px; height:15px;}
+  .check b{font-size:15px;}
+  .check p{font-size:14px; color:var(--ink-2); margin-top:2px;}
+  .check a{color:var(--navy); font-weight:700; text-decoration:none; border-bottom:1px solid var(--navy);}
+
+  /* ===== FAQ ===== */
+  .faq{margin-top:52px;}
+  .faq h2{font-size:22px; font-weight:900; margin-bottom:18px;}
+  details.faq-item{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:12px; overflow:hidden;
+  }
+  details.faq-item summary{
+    cursor:pointer; list-style:none; padding:16px 20px; font-weight:700; font-size:15px; display:flex; align-items:center; gap:10px;
+  }
+  details.faq-item summary::-webkit-details-marker{display:none;}
+  details.faq-item summary .arrow{margin-left:auto; color:var(--ink-3); transition:transform .2s ease; flex:none;}
+  details.faq-item[open] summary .arrow{transform:rotate(90deg);}
+  details.faq-item .faq-body{padding:0 20px 18px; font-size:14px; color:var(--ink-2);}
+
+  /* ===== Footer ===== */
+  footer{background:var(--navy); color:#A9B6CD; padding:34px 0; font-size:13px;}
+  footer .wrap{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  footer a{color:#D7E0EF; text-decoration:none;}
+  .toast{
+    position:fixed; left:50%; bottom:36px; transform:translateX(-50%) translateY(80px);
+    background:var(--navy); color:#fff; padding:12px 24px; border-radius:12px; font-size:14px; font-weight:700;
+    box-shadow:0 10px 30px rgba(27,42,74,.3); opacity:0; transition:all .25s ease; z-index:99; pointer-events:none;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast.ok{background:var(--green);}
+
+  @media (max-width: 900px){
+    .steps{grid-template-columns:1fr;}
+    header h1{font-size:34px;}
+    header{padding:48px 0 40px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="hero-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/></svg>
+      豆包原生技能 · 完全免费
+    </span>
+    <h1>AI 求职管家<em>，5 分钟装好</em></h1>
+    <p class="sub">上传简历，它自动识别你的求职意向，从全国帮你采集匹配岗位、打分排序、生成简历优化和求职简报。全程不用懂飞书、不用写代码。</p>
+    <div class="promises">
+      <span class="promise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>简历驱动，不限行业</span>
+      <span class="promise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>自动采集 + 智能匹配打分</span>
+      <span class="promise"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>岗位库 + 投递看板沉淀</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="intro">
+      <h2>三步，开始使用</h2>
+      <p>跟着下面的 1 → 2 → 3 做，做完就能跑第一轮求职分析。</p>
+    </div>
+
+    <div class="steps">
+      <!-- 步骤1 -->
+      <section class="step">
+        <div class="step-num">01</div>
+        <h3>复制飞书表格模板</h3>
+        <p>模板里已经配好了「岗位库」和「投递追踪」两张表，字段、视图、看板全都不用自己搭。</p>
+        <button class="btn btn-navy" onclick="copyTemplate()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          复制模板链接
+        </button>
+        <div class="todo"><b>要做什么：</b>把链接发给手机或电脑浏览器打开 → 点「复制到我的空间」→ 完成。</div>
+      </section>
+
+      <!-- 步骤2 -->
+      <section class="step">
+        <div class="step-num">02</div>
+        <h3>复制提示词，创建技能</h3>
+        <p>一段提示词就能在豆包里生成「AI 求职管家」技能。点下方按钮，把提示词粘贴给豆包发送即可。</p>
+        <button class="btn btn-amber" onclick="copyPrompt()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+          一键复制完整提示词
+        </button>
+        <details class="prompt-box">
+          <summary>
+            <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            查看提示词全文
+            <span class="len">约 2,400 字</span>
+          </summary>
+          <div class="prompt-inner">
+            <pre id="promptText">请帮我创建并启用一个名为「AI求职管家」的技能，指令如下：
+
+你是我的「AI求职管家」技能。你的职责是基于我的简历，持续完成求职全流程的自动化分析与交付。
+
+【目标定位】
+- 目标行业板块：不限行业——以简历求职意向自动推导目标行业（如 ToB 企业服务 / AI 解决方案销售 / 商务 BD 可投向食品、互联网、制造、零售、医疗健康、金融、SaaS 等任意行业的对应岗位），不做行业预设限制；「行业板块」仅作为岗位分类标签
+- 目标城市：不限（全国范围）
+- 招聘类型（校招/社招智能分流）：按简历教育状态自动判定——在校阶段（含应届未毕业）→ 优先筛选「校园招聘」与「均可（经验不限）」岗位；离校阶段（已毕业）→ 筛选「社会招聘」岗位；匹配评分时按此分流过滤
+- 产出：行业与岗位综合分析、当前开放岗位清单、优化版简历、STAR版简历、求职简报
+
+【数据源】
+- 简历：用户上传到技能知识库的 PDF/Word 文件（assets 目录），命名建议「姓名-求职方向.pdf」
+- 岗位与投递数据：用户飞书多维表格「豆包求职管家」，包含「岗位库」与「投递追踪」两张表（用户提供复制后的表格链接，字段结构见下方字段清单）。首次运行时请先读取表格结构确认字段名一致。
+
+【工作流程】
+1. 简历解析：读取知识库中的简历，提取个人信息、工作经历、项目经历、技能标签、教育背景。
+2. 求职意向与用户画像：先识别简历对应的求职意向（如：ToB企业服务、AI解决方案销售、商务BD），再将简历提炼为能力标签（如：客户沟通成交、方案梳理、AI工具应用），并给出目标行业适配度评分（0-100）；同时判定简历教育状态：在校（在读/应届未毕业）或离校（已毕业）——作为校招/社招分流的依据。
+3. 岗位采集与沉淀：优先读取飞书多维表格「岗位库」中最近抓取的岗位数据；若岗位库为空或数据过期（超过3天未更新），通过浏览器操作在 BOSS直聘、猎聘、企业官方招聘官网（字节/腾讯/伊利/蒙牛等）等平台，按简历求职意向生成检索关键词（如：大客户销售、解决方案销售、商务BD、ToB销售、AI/云销售），跨行业（不限板块）在全国范围搜索岗位；采集时同步区分通道：在校阶段优先搜索各企业「校园招聘」官网与"校招/应届/经验不限"岗位，离校阶段搜索「社会招聘」通道。采集结果回填到飞书多维表格「岗位库」。
+4. 岗位匹配：以简历求职意向为筛选核心，对岗位库中"待投"状态的岗位逐一输出匹配度评分（0-100）并回填「匹配度」字段——先按硬性条件过滤（经验年限、学历、薪资区间），再按校招/社招分流：在校阶段，校园招聘与"均可（经验不限）"岗位正常评分，社会招聘且要求经验的岗位显著降权并提示"应届生建议优先校招通道"；离校阶段反之。然后按岗位方向与求职意向的相关度、关键词与能力标签匹配，最后结合岗位要求给出"优势"和"差距"各一条点评。方向不符的岗位（如运营/内容/直播类，与求职意向无关）应显著降权。
+5. 文档生成：生成四份文档——
+   文档1《行业与岗位综合分析》：能力标签、目标行业适配评分、Top5目标岗位匹配分析（优势/差距）；
+   文档2《当前开放匹配岗位清单》：从岗位库取数，表格列出岗位、公司、城市、薪资、截止时间、匹配度，用红色标注匹配度≥80的重点岗位和3天内即将截止的岗位，按匹配度降序排列；
+   文档3《优化版简历》：根据目标岗位关键词重写，突出相关技能，格式整洁；
+   文档4《详细优化版简历》：采用STAR法则重构经历（情境-任务-行动-结果），专业度高。
+6. 简报汇总与投递联动：汇总为《求职简报》输出为飞书云文档，并通过飞书发送消息提醒我查看；对匹配度≥60的岗位给出投递建议，用户投递后可在「投递追踪」表登记状态流转（待投→已投→面试中→已拒/Offer）。
+
+【岗位库字段清单】（新增记录必须填写）
+岗位名称（主字段）、公司、行业板块（单选：食品企业/互联网企业/制造/零售/医疗健康/金融/教育/企业服务/SaaS/其他）、城市、薪资范围、经验要求、学历要求、岗位链接、发布日期、截止日期、关键词标签（多选）、招聘类型（单选：校园招聘/社会招聘/均可（经验不限））、状态（默认"待投"，单选：待投/已投/面试中/已拒/已下架）、抓取日期（当天）、匹配度（数字，评分后回填）、剩余天数（公式，系统自动）、备注（优势/差距点评）。
+
+【投递追踪表字段清单】
+岗位名称（主字段）、公司、行业板块、城市、岗位链接、投递日期、状态（单选：待投/已投/面试中/已拒/Offer）、匹配度、面试时间、反馈备注。
+
+【岗位库更新规则（及时更替、及时更新）】
+- 每次运行优先采集最新岗位，与库内已有记录去重（按 岗位名称+公司+城市 判断）；
+- 已超过截止日期的岗位，将状态更新为"已下架"；
+- 新采集岗位入库、下架岗位移除，保持岗位库鲜活。
+
+【匹配阈值规则】
+- 匹配度≥60分：按优先级投递，跟踪反馈；
+- 匹配度<60分：提示检查简历信息完整性或调整目标行业/关键词；
+- 岗位即将截止（≤3天）：红色标注并优先提示（方向不符的岗位即使临期也应提示不推荐投递）。
+
+【输出要求】
+- 所有评分需给出依据（基于简历中哪些经历/技能）；
+- 简历优化只基于我提供的真实经历，不得虚构；
+- 全程使用中文输出。
+
+【首次使用步骤】
+1. 我先上传我的简历给你；
+2. 我提供「豆包求职管家」多维表格的复制链接（已含岗位库+投递追踪模板）；
+3. 你读取表格结构确认字段后，执行一次完整流程：解析简历 → 识别求职意向与教育状态 → 采集岗位 → 回填岗位库 → 匹配评分 → 生成四份文档与《求职简报》→ 推送飞书。</pre>
+            <div class="copy-row">
+              <button class="btn btn-amber" onclick="copyPrompt()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                复制提示词
+              </button>
+              <span style="font-size:13px; color:var(--ink-3); align-self:center;">然后回到豆包对话框，粘贴并发送</span>
+            </div>
+          </div>
+        </details>
+        <div class="todo"><b>要做什么：</b>把复制的提示词发给豆包 → 等它说「技能已创建」→ 完成。</div>
+      </section>
+
+      <!-- 步骤3 -->
+      <section class="step">
+        <div class="step-num">03</div>
+        <h3>上传简历，跑第一轮</h3>
+        <p>把简历交给技能，再把第 1 步复制好的表格链接发过去，它就会自动解析、采集、评分、生成报告。</p>
+        <button class="btn btn-ghost" onclick="scrollToGuide()">
+          看详细操作
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+        </button>
+        <div class="todo"><b>要做什么：</b>① 上传简历 PDF 给豆包 → ② 发第 1 步的表格链接 → ③ 说「用 AI 求职管家，先做一次完整测试」。</div>
+      </section>
+    </div>
+
+    <!-- ===== 详细引导 ===== -->
+    <section class="guide" id="guide">
+      <h2>第 3 步 · 详细操作</h2>
+      <p>技能创建好后，在豆包对话框里按这个顺序来，它会一步步引导你。</p>
+      <div class="check">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div><b>上传你的简历</b><p>直接把简历文件（PDF 或 Word）发给豆包，技能会自动存入知识库。没有简历的话，先让它帮你写一份初稿也可以。</p></div>
+      </div>
+      <div class="check">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div><b>把表格链接发给豆包</b><p>第 1 步复制模板后得到的新链接（形如 <span style="font-family:monospace;font-size:12.5px;">https://…feishu.cn/base/…</span>），直接粘贴发给它。</p></div>
+      </div>
+      <div class="check">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div><b>说一句话开始</b><p>发送：<b>"用 AI 求职管家，先做一次完整测试"</b>。它会读取表格结构 → 识别求职意向 → 全国采岗 → 打分回填 → 生成四份文档和《求职简报》。</p></div>
+      </div>
+      <div class="check">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div><b>授权飞书连接器</b><p>技能需要读写你的飞书多维表格、生成云文档。遇到授权提示时点「同意」即可，这是它唯一需要你点的权限。</p></div>
+      </div>
+      <div class="check">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <div><b>之后每天怎么用</b><p>直接说「更新岗位」「今天有什么新岗位」「给我看投递看板」即可。想自动运行，就让它设一个每 3 天的定时任务。</p></div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="faq">
+      <h2>常见问题</h2>
+      <details class="faq-item">
+        <summary>没有飞书账号怎么办？<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></summary>
+        <div class="faq-body">飞书注册是免费的（手机号即可）。本工具的数据层（岗位库、投递追踪、简报）都在飞书多维表格里，这是它唯一的外部依赖；也可以直接用豆包账号体系的在线文档能力。</div>
+      </details>
+      <details class="faq-item">
+        <summary>我的简历会被公开吗？<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></summary>
+        <div class="faq-body">不会。简历只存在你自己的豆包知识库和飞书空间里。模板里自带的 3 条岗位是示例数据，复制后可直接删除。开源仓库中不含任何人的简历。</div>
+      </details>
+      <details class="faq-item">
+        <summary>需要付费吗？需要开通豆包「工作伙伴」吗？<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></summary>
+        <div class="faq-body">不需要。技能只依赖豆包基础能力 + 飞书连接器，无任何额外付费项。</div>
+      </details>
+      <details class="faq-item">
+        <summary>招聘网站需要登录才能看岗位怎么办？<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></summary>
+        <div class="faq-body">遇到登录或验证时，技能会引导你接管浏览器完成一次验证（豆包内置的交互能力），验证完继续自动采集。企业官方招聘官网大部分免登录可直接读取。</div>
+      </details>
+      <details class="faq-item">
+        <summary>是只招食品/互联网行业吗？<svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></summary>
+        <div class="faq-body">不限行业。技能先读简历识别你的求职意向，再按意向在全国跨行业搜索对应岗位；在校生会自动走校园招聘通道，已毕业走社会招聘。</div>
+      </details>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>AI 求职管家 · 开源项目，可自由使用与修改</span>
+    <span>有任何问题，直接问豆包里的技能即可</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var TEMPLATE_URL = "https://my.feishu.cn/base/GoJ1bW2PMaygPbstYbIcA1rQn4f";
+
+  function showToast(msg, ok){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast show' + (ok ? ' ok' : '');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function(){ t.className = 'toast'; }, 2200);
+  }
+
+  function copyText(text, okMsg){
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try{ document.execCommand('copy'); showToast(okMsg, true); }
+      catch(e){ showToast('复制失败，请手动长按选择复制', false); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(
+        function(){ showToast(okMsg, true); },
+        function(){ fallback(); }
+      );
+    } else { fallback(); }
+  }
+
+  function copyTemplate(){
+    copyText(TEMPLATE_URL, '模板链接已复制，去浏览器打开即可');
+    window.open(TEMPLATE_URL, '_blank');
+  }
+
+  function copyPrompt(){
+    var t = document.getElementById('promptText');
+    copyText(t.textContent.trim(), '提示词已复制，去豆包粘贴发送');
+  }
+
+  function scrollToGuide(){
+    document.getElementById('guide').scrollIntoView({behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
